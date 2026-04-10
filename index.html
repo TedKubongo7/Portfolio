@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ted Kubongo | Automation Consultant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0b0b0f;
+      --bg-2:        #13131a;
+      --bg-3:        #1a1a24;
+      --surface:     #111118;
+      --border:      rgba(255,255,255,0.07);
+      --border-dark: rgba(255,255,255,0.14);
+      --accent:      #00e5a0;
+      --accent-2:    #f59e0b;
+      --accent-dim:  rgba(0,229,160,0.09);
+      --text:        #eeeef2;
+      --text-mid:    #9999b0;
+      --text-dim:    #55556a;
+      --font-serif:  'Cormorant Garamond', Georgia, serif;
+      --font-body:   'DM Sans', sans-serif;
+      --font-mono:   'DM Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.35;
+    }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 3rem;
+      background: rgba(11,11,15,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-serif); font-size: 1.35rem; font-weight: 600;
+      letter-spacing: -0.5px; color: var(--text); text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 0.25rem; list-style: none; }
+    .nav-links a {
+      font-family: var(--font-body); font-size: 0.82rem; font-weight: 500;
+      letter-spacing: 0.04em; color: var(--text-dim); text-decoration: none;
+      padding: 0.45rem 0.85rem; border-radius: 6px; transition: all 0.2s;
+      text-transform: uppercase;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); background: var(--accent-dim); }
+
+    section {
+      display: none; position: relative; z-index: 1;
+      min-height: 100vh; padding: 7rem 3rem 4rem;
+      max-width: 1100px; margin: 0 auto; animation: fadeIn 0.4s ease;
+    }
+    section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    .section-eyebrow {
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: var(--font-serif); font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 300; line-height: 1.1; letter-spacing: -1px;
+      color: var(--text); margin-bottom: 1.5rem;
+    }
+    .section-title em { font-style: italic; color: var(--accent); }
+    .divider { height: 1px; background: var(--border-dark); margin: 2.5rem 0; }
+
+    /* HOME */
+    #home { display: none; padding-top: 0; min-height: 100vh; }
+    #home.active { display: flex; flex-direction: column; justify-content: center; }
+    .hero {
+      display: flex; flex-direction: column; align-items: flex-start;
+      padding-top: 7rem; padding-bottom: 3rem; max-width: 800px; position: relative; z-index: 1;
+    }
+    .hero-name {
+      font-family: var(--font-serif); font-size: clamp(3.5rem, 7vw, 6.5rem);
+      font-weight: 300; line-height: 1; letter-spacing: -3px; margin-bottom: 0.5rem;
+      opacity: 0; transform: translateY(30px);
+      animation: fade-up 0.9s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
+    }
+    .hero-name em { font-style: italic; color: var(--accent); display: block; }
+    .hero-cta {
+      display: flex; gap: 0.85rem; flex-wrap: wrap; opacity: 0; transform: translateY(20px);
+      animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.85s forwards;
+    }
+    .btn-primary {
+      font-family: var(--font-body); font-weight: 500; font-size: 0.88rem;
+      padding: 0.8rem 1.75rem; border-radius: 7px; background: var(--accent);
+      color: #0b0b0f; border: none; cursor: pointer; transition: all 0.2s;
+      text-decoration: none; display: inline-block; letter-spacing: 0.02em;
+    }
+    .btn-primary:hover { background: #00c488; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,229,160,0.25); }
+    .btn-outline {
+      font-family: var(--font-body); font-weight: 500; font-size: 0.88rem;
+      padding: 0.8rem 1.75rem; border-radius: 7px; background: transparent;
+      color: var(--text); border: 1px solid var(--border-dark); cursor: pointer;
+      transition: all 0.2s; text-decoration: none; display: inline-block;
+    }
+    .btn-outline:hover { background: var(--bg-2); border-color: var(--accent); color: var(--accent); }
+
+    #home.active::after {
+      content: ''; position: fixed; z-index: 0; pointer-events: none;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(0,229,160,0.06) 0%, transparent 70%);
+      border-radius: 50%; top: 5%; right: -150px;
+      animation: orb-drift 14s ease-in-out infinite alternate;
+    }
+    @keyframes orb-drift {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(-50px,80px) scale(1.15); }
+    }
+    .hero-floats { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .float-word {
+      position: absolute; font-family: var(--font-mono); font-size: 0.62rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.06); white-space: nowrap;
+      animation: float-drift linear infinite; opacity: 0;
+    }
+    @keyframes float-drift {
+      0%   { transform: translateY(0); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { transform: translateY(-90px); opacity: 0; }
+    }
+    @keyframes fade-up { to { opacity: 1; transform: translateY(0); } }
+
+    .hero-descriptors {
+      display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2.5rem;
+      opacity: 0; transform: translateY(20px);
+      animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.45s forwards;
+    }
+    .hero-line {
+      font-family: var(--font-serif); font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+      font-weight: 300; color: var(--text-mid); letter-spacing: -0.3px; line-height: 1.3;
+    }
+    .hero-line span { color: var(--text); font-weight: 400; }
+
+    .home-overview {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+      padding: 4rem 0; border-top: 1px solid var(--border); margin-top: 5rem;
+    }
+    .overview-label {
+      font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase;
+      letter-spacing: 0.15em; color: var(--accent); margin-bottom: 1rem;
+    }
+    .overview-text { font-size: 0.95rem; line-height: 1.85; color: var(--text-mid); font-weight: 300; }
+
+    .home-journey { padding: 4rem 0; border-top: 1px solid var(--border); }
+    .journey-eyebrow {
+      font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase;
+      letter-spacing: 0.15em; color: var(--accent); margin-bottom: 0.75rem;
+    }
+    .journey-title {
+      font-family: var(--font-serif); font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 300; letter-spacing: -1px; line-height: 1.15; color: var(--text); margin-bottom: 2.5rem;
+    }
+    .journey-title em { font-style: italic; color: var(--accent); }
+    .journey-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    .journey-step {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem; position: relative; transition: border-color 0.2s;
+    }
+    .journey-step:hover { border-color: var(--border-dark); }
+    .journey-step-current { border-color: rgba(0,229,160,0.25); background: rgba(0,229,160,0.03); }
+    .journey-num { font-family: var(--font-mono); font-size: 0.65rem; color: var(--accent); letter-spacing: 0.1em; margin-bottom: 0.85rem; }
+    .journey-step-title { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 0.75rem; letter-spacing: -0.3px; }
+    .journey-step-body { font-size: 0.83rem; line-height: 1.7; color: var(--text-mid); font-weight: 300; }
+    .journey-current-badge {
+      display: inline-block; margin-top: 1rem; font-family: var(--font-mono); font-size: 0.6rem;
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent);
+      background: var(--accent-dim); border: 1px solid rgba(0,229,160,0.2);
+      padding: 0.2rem 0.6rem; border-radius: 100px;
+    }
+
+    .home-numbers {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--border); padding-top: 4rem; padding-bottom: 4rem; gap: 2rem;
+    }
+    .number-item { display: flex; flex-direction: column; }
+    .number-big {
+      font-family: var(--font-serif); font-size: clamp(2.5rem, 4vw, 4rem);
+      font-weight: 300; letter-spacing: -2px; line-height: 1; color: var(--accent); margin-bottom: 0.5rem;
+    }
+    .number-label { font-size: 0.9rem; font-weight: 500; color: var(--text); margin-bottom: 0.25rem; }
+    .number-sub { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    @media (max-width: 900px) {
+      .home-overview { grid-template-columns: 1fr; gap: 2rem; }
+      .journey-steps { grid-template-columns: 1fr 1fr; }
+      .home-numbers  { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .journey-steps { grid-template-columns: 1fr; }
+      .home-numbers  { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 3fr 2fr; gap: 4rem; align-items: start; }
+    .about-body { font-size: 1rem; line-height: 1.85; color: var(--text-mid); font-weight: 300; }
+    .about-body p { margin-bottom: 1.25rem; }
+    .about-body strong { color: var(--text); font-weight: 500; }
+    .about-sidebar { display: flex; flex-direction: column; gap: 1rem; }
+    .sidebar-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+    .sidebar-card-title { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 0.85rem; }
+    .sidebar-item { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.6rem; font-size: 0.88rem; color: var(--text-mid); line-height: 1.45; }
+    .sidebar-item:last-child { margin-bottom: 0; }
+    .sidebar-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); margin-top: 6px; flex-shrink: 0; }
+
+    .football-banner {
+      background: linear-gradient(135deg, #0d3d2a 0%, #071f15 100%);
+      border: 1px solid rgba(0,229,160,0.2); border-radius: 14px; padding: 1.75rem; color: white; margin-top: 1.5rem;
+    }
+    .football-banner-header { margin-bottom: 1.5rem; }
+    .football-banner-title { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 400; margin-bottom: 0.5rem; letter-spacing: -0.3px; }
+    .football-banner-sub { font-size: 0.88rem; opacity: 0.7; line-height: 1.7; font-weight: 300; max-width: 520px; }
+    .football-school-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.85rem; }
+    .football-school-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 1rem 1.1rem; }
+    .football-school-name { font-family: var(--font-body); font-size: 0.88rem; font-weight: 600; color: #fff; margin-bottom: 0.2rem; }
+    .football-school-detail { font-family: var(--font-mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(0,229,160,0.7); margin-bottom: 0.75rem; }
+    .football-school-accolades { display: flex; flex-direction: column; gap: 0.3rem; }
+    .football-accolade { font-size: 0.78rem; color: rgba(255,255,255,0.65); display: flex; align-items: center; gap: 0.4rem; line-height: 1.4; }
+    .football-accolade::before { content: '·'; color: rgba(0,229,160,0.6); flex-shrink: 0; }
+    @media (max-width: 700px) { .football-school-cards { grid-template-columns: 1fr; } }
+
+    /* PROJECTS */
+    .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .project-card {
+      background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem;
+      cursor: pointer; transition: all 0.25s; position: relative; overflow: hidden;
+    }
+    .project-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--card-accent, var(--accent)); transform: scaleX(0);
+      transform-origin: left; transition: transform 0.3s ease;
+    }
+    .project-card:hover { border-color: var(--border-dark); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+    .project-card:hover::before { transform: scaleX(1); }
+    .project-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .project-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    .project-tag { font-family: var(--font-mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.2rem 0.6rem; border-radius: 100px; }
+    .project-name { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 600; margin-bottom: 0.35rem; letter-spacing: -0.5px; }
+    .project-tagline { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 1rem; line-height: 1.5; }
+    .project-desc { font-size: 0.88rem; color: var(--text-mid); line-height: 1.7; font-weight: 300; margin-bottom: 1.25rem; }
+    .project-tech { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .tech-chip { font-family: var(--font-mono); font-size: 0.62rem; color: var(--text-dim); background: var(--bg-3); border: 1px solid var(--border); padding: 0.2rem 0.55rem; border-radius: 5px; }
+    .card-green  { --card-accent: #00e5a0; } .card-violet { --card-accent: #a78bfa; }
+    .card-amber  { --card-accent: #f59e0b; } .card-teal   { --card-accent: #2dd4bf; }
+    .card-red    { --card-accent: #f87171; }
+    .card-green  .project-icon { background: rgba(0,229,160,0.1); }
+    .card-violet .project-icon { background: rgba(167,139,250,0.1); }
+    .card-amber  .project-icon { background: rgba(245,158,11,0.1); }
+    .card-teal   .project-icon { background: rgba(45,212,191,0.1); }
+    .card-red    .project-icon { background: rgba(248,113,113,0.1); }
+    .card-green  .project-tag { background: rgba(0,229,160,0.1); color: #00c488; border: 1px solid rgba(0,229,160,0.2); }
+    .card-violet .project-tag { background: rgba(167,139,250,0.1); color: #a78bfa; border: 1px solid rgba(167,139,250,0.2); }
+    .card-amber  .project-tag { background: rgba(245,158,11,0.1); color: #d97706; border: 1px solid rgba(245,158,11,0.2); }
+    .card-teal   .project-tag { background: rgba(45,212,191,0.1); color: #0d9488; border: 1px solid rgba(45,212,191,0.2); }
+    .card-red    .project-tag { background: rgba(248,113,113,0.1); color: #ef4444; border: 1px solid rgba(248,113,113,0.2); }
+
+    /* CASE STUDIES */
+    .case-studies-intro { font-size: 1rem; line-height: 1.85; color: var(--text-mid); font-weight: 300; max-width: 680px; margin-bottom: 3rem; }
+    .case-study {
+      background: var(--bg-2); border: 1px solid var(--border); border-radius: 16px;
+      padding: 2.5rem; margin-bottom: 1.5rem; position: relative; overflow: hidden; transition: border-color 0.2s;
+    }
+    .case-study:hover { border-color: var(--border-dark); }
+    .case-study::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--cs-accent, var(--accent)); }
+    .case-study-1 { --cs-accent: #00e5a0; } .case-study-2 { --cs-accent: #a78bfa; } .case-study-3 { --cs-accent: #f59e0b; }
+    .cs-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 2rem; margin-bottom: 1.75rem; flex-wrap: wrap; }
+    .cs-eyebrow { font-family: var(--font-mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--cs-accent, var(--accent)); margin-bottom: 0.5rem; }
+    .cs-title { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 600; letter-spacing: -0.5px; color: var(--text); line-height: 1.2; margin-bottom: 0.35rem; }
+    .cs-subtitle { font-size: 0.88rem; color: var(--text-dim); }
+    .cs-impact-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .cs-pill { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.35rem 0.85rem; border-radius: 100px; border: 1px solid var(--cs-accent, var(--accent)); color: var(--cs-accent, var(--accent)); background: rgba(0,0,0,0.2); white-space: nowrap; }
+    .cs-body { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+    .cs-col-title { font-family: var(--font-mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-dim); margin-bottom: 0.75rem; }
+    .cs-col-body { font-size: 0.87rem; color: var(--text-mid); line-height: 1.75; font-weight: 300; }
+    .cs-col-body li { margin-left: 1rem; margin-bottom: 0.35rem; }
+    .cs-tech { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+    @media (max-width: 800px) { .cs-body { grid-template-columns: 1fr; gap: 1.25rem; } .cs-header { flex-direction: column; gap: 1rem; } }
+
+    /* RESUME (merged with Experience) */
+    .resume-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .resume-section { margin-bottom: 2rem; }
+    .resume-section-title {
+      font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase;
+      letter-spacing: 0.15em; color: var(--accent); margin-bottom: 1rem;
+      padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-dark);
+    }
+    .resume-item { margin-bottom: 1.25rem; }
+    .resume-item-header { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 0.2rem; }
+    .resume-item-title { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 600; }
+    .resume-item-date { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); white-space: nowrap; }
+    .resume-item-sub { font-size: 0.84rem; color: var(--accent); font-weight: 500; margin-bottom: 0.5rem; }
+    .resume-item-body { font-size: 0.85rem; color: var(--text-mid); line-height: 1.7; font-weight: 300; }
+    .resume-item-body li { margin-left: 1.1rem; margin-bottom: 0.25rem; }
+    .resume-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+    .resume-chip { font-family: var(--font-mono); font-size: 0.62rem; color: var(--text-dim); background: var(--bg-2); border: 1px solid var(--border); padding: 0.2rem 0.55rem; border-radius: 5px; }
+
+    /* Skills grid (moved into Resume) */
+    .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 0.5rem; }
+    .skill-group { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem; }
+    .skill-group-title { font-family: var(--font-mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 0.65rem; }
+    .skill-list { display: flex; flex-direction: column; gap: 0.3rem; }
+    .skill-item { font-size: 0.84rem; color: var(--text-mid); display: flex; align-items: center; gap: 0.4rem; }
+    .skill-item::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--accent-2); flex-shrink: 0; }
+    @media (max-width: 700px) { .skills-grid { grid-template-columns: 1fr 1fr; } }
+
+    /* CONTACT */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .contact-intro { font-size: 1rem; line-height: 1.85; color: var(--text-mid); font-weight: 300; margin-bottom: 2rem; }
+    .contact-intro strong { color: var(--text); font-weight: 500; }
+    .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-link {
+      display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.25rem;
+      background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px;
+      text-decoration: none; transition: all 0.2s; cursor: pointer;
+    }
+    .contact-link:hover { border-color: var(--accent); background: var(--accent-dim); transform: translateX(4px); }
+    .contact-link-icon {
+      width: 38px; height: 38px; border-radius: 9px; background: var(--accent-dim);
+      border: 1px solid rgba(0,229,160,0.15); display: flex; align-items: center;
+      justify-content: center; font-size: 1rem; flex-shrink: 0;
+    }
+    .contact-link-body { display: flex; flex-direction: column; }
+    .contact-link-label { font-family: var(--font-mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-dim); margin-bottom: 0.2rem; }
+    .contact-link-value { font-size: 0.92rem; color: var(--text); font-weight: 500; }
+    .contact-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+    .contact-availability {
+      background: linear-gradient(135deg, rgba(0,229,160,0.06) 0%, rgba(0,229,160,0.02) 100%);
+      border: 1px solid rgba(0,229,160,0.2); border-radius: 14px; padding: 1.75rem;
+    }
+    .contact-avail-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+    .contact-avail-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0,229,160,0.2); animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(0,229,160,0.2); }
+      50%       { box-shadow: 0 0 0 6px rgba(0,229,160,0.08); }
+    }
+    .contact-avail-title { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 600; color: var(--text); letter-spacing: -0.3px; }
+    .contact-avail-body { font-size: 0.88rem; color: var(--text-mid); line-height: 1.75; font-weight: 300; }
+    .contact-what { background: var(--bg-2); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; }
+    .contact-what-title { font-family: var(--font-mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 1rem; }
+    .contact-what-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .contact-what-item { display: flex; align-items: flex-start; gap: 0.65rem; font-size: 0.88rem; color: var(--text-mid); line-height: 1.5; }
+    .contact-what-item::before { content: '→'; color: var(--accent); font-size: 0.75rem; margin-top: 0.1rem; flex-shrink: 0; }
+    @media (max-width: 800px) { .contact-grid { grid-template-columns: 1fr; gap: 2rem; } }
+
+    /* MOBILE NAV */
+    .nav-hamburger {
+      display: none; flex-direction: column; justify-content: center; gap: 5px;
+      width: 36px; height: 36px; cursor: pointer; background: none; border: none;
+      padding: 4px; border-radius: 6px; transition: background 0.2s;
+    }
+    .nav-hamburger:hover { background: var(--accent-dim); }
+    .nav-hamburger span {
+      display: block; width: 100%; height: 1.5px; background: var(--text-mid);
+      border-radius: 2px; transition: all 0.3s cubic-bezier(0.16,1,0.3,1); transform-origin: center;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .nav-drawer {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 99;
+      background: rgba(11,11,15,0.97); backdrop-filter: blur(20px);
+      flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    .nav-drawer.open { display: flex; opacity: 1; pointer-events: all; }
+    .nav-drawer a {
+      font-family: var(--font-serif); font-size: 2.2rem; font-weight: 300; letter-spacing: -1px;
+      color: var(--text-mid); text-decoration: none; padding: 0.5rem 1.5rem;
+      border-radius: 8px; transition: all 0.2s;
+    }
+    .nav-drawer a:hover, .nav-drawer a.active { color: var(--accent); }
+
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      section { padding: 6rem 1.5rem 3rem; }
+      .hero { max-width: 100%; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo" onclick="return showSection('home')">Ted <span>Kubongo</span></a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showSection('home')" id="nav-home" class="active">Home</a></li>
+    <li><a href="#" onclick="showSection('about')" id="nav-about">About</a></li>
+    <li><a href="#" onclick="showSection('projects')" id="nav-projects">Projects</a></li>
+    <li><a href="#" onclick="showSection('case-studies')" id="nav-case-studies">Case Studies</a></li>
+    <li><a href="#" onclick="showSection('resume')" id="nav-resume">Resume</a></li>
+    <li><a href="#" onclick="showSection('contact')" id="nav-contact">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-drawer" id="nav-drawer">
+  <a href="#" onclick="showSectionMobile('home')">Home</a>
+  <a href="#" onclick="showSectionMobile('about')">About</a>
+  <a href="#" onclick="showSectionMobile('projects')">Projects</a>
+  <a href="#" onclick="showSectionMobile('case-studies')">Case Studies</a>
+  <a href="#" onclick="showSectionMobile('resume')">Resume</a>
+  <a href="#" onclick="showSectionMobile('contact')">Contact</a>
+</div>
+
+<!-- HOME -->
+<section id="home" class="active">
+  <div class="hero-floats" id="hero-floats"></div>
+  <div class="hero">
+    <h1 class="hero-name">Ted<br/><em>Kubongo.</em></h1>
+    <div class="hero-descriptors">
+      <div class="hero-line">Business-minded. <span>Builder.</span></div>
+      <div class="hero-line">Supply chain background. <span>Practical systems.</span></div>
+      <div class="hero-line">Former D1 athlete. <span>High standards.</span></div>
+    </div>
+    <div class="hero-cta">
+      <a href="#" class="btn-primary" onclick="showSection('projects')">View My Work</a>
+      <a href="#" class="btn-outline" onclick="showSection('about')">About Me</a>
+    </div>
+  </div>
+  <div class="home-overview">
+    <div class="overview-col">
+      <div class="overview-label">What I Do</div>
+      <p class="overview-text">I build automation and decision-support tools for mid-market companies. My focus is on improving workflows that are still being managed through spreadsheets, email chains, and manual follow-up.</p>
+    </div>
+    <div class="overview-col">
+      <div class="overview-label">What You'll Find Here</div>
+      <p class="overview-text">A portfolio of business tools built for operations, procurement, HR, document processing, and contract review — along with real case studies from production work, my background, and my approach to solving operating problems.</p>
+    </div>
+  </div>
+  <div class="home-journey">
+    <div class="journey-eyebrow">The Path</div>
+    <h2 class="journey-title">Built through <em>experience.</em></h2>
+    <div class="journey-steps">
+      <div class="journey-step">
+        <div class="journey-num">01</div>
+        <div class="journey-step-title">D1 Athlete</div>
+        <div class="journey-step-body">Played running back at three universities across two countries: Maine, UBC, and Saskatchewan. Football built the discipline, adaptability, and composure I still bring to my work.</div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-num">02</div>
+        <div class="journey-step-title">Supply Chain Analyst</div>
+        <div class="journey-step-body">Worked in operations and supply chain analytics, directly inside the reporting gaps, spreadsheet bottlenecks, and manual processes that many mid-market teams still deal with every day.</div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-num">03</div>
+        <div class="journey-step-title">Automation &amp; Software</div>
+        <div class="journey-step-body">Built production automation systems using Python, FastAPI, and applied AI — moving from internal tooling to full business applications with measurable operational impact.</div>
+      </div>
+      <div class="journey-step journey-step-current">
+        <div class="journey-num">04</div>
+        <div class="journey-step-title">Founder, Kai Technologies</div>
+        <div class="journey-step-body">Building a consulting practice focused on practical automation for businesses that need better systems, better visibility, and less manual work.</div>
+        <div class="journey-current-badge">Current</div>
+      </div>
+    </div>
+  </div>
+  <div class="home-numbers">
+    <div class="number-item">
+      <div class="number-big">Days→Min</div>
+      <div class="number-label">Processing Time Reduced</div>
+      <div class="number-sub">Multi-day pipelines cut to minutes</div>
+    </div>
+    <div class="number-item">
+      <div class="number-big">15h+</div>
+      <div class="number-label">Weekly Manual Work Eliminated</div>
+      <div class="number-sub">Per automation deployed</div>
+    </div>
+    <div class="number-item">
+      <div class="number-big">5</div>
+      <div class="number-label">Business Tools Built</div>
+      <div class="number-sub">Operations, HR, Legal, Procurement, Documents</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-eyebrow">About Me</div>
+  <h2 class="section-title">The person <em>behind the work.</em></h2>
+  <div class="divider"></div>
+  <div class="about-grid">
+    <div>
+      <div class="about-body">
+        <p>I'm a supply chain data analyst based in Calgary with experience building reporting tools, automation workflows, and business applications. My work combines hands-on operational context with practical software development.</p>
+        <p>My advantage is that I have worked inside the kinds of environments I now build for. I've seen firsthand what broken spreadsheets, manual document handling, inconsistent data, and slow reporting actually cost a team — in time, accuracy, and decision quality. I build tools around those real problems, not abstract use cases.</p>
+        <p>At one organization, I automated an end-to-end supply chain workflow that had previously taken multiple days to run manually. The rebuilt system completed the same process in minutes, with better accuracy and full auditability. That experience made one thing clear: most organizations are sitting on solvable problems — they just haven't had someone build the solution yet.</p>
+        <p>Through <strong>Kai Technologies</strong>, I build automation and applied AI solutions for mid-market companies across North America. My core stack includes Python, FastAPI, and the Anthropic Claude API, with a focus on tools that support decisions, organize data, and reduce manual effort.</p>
+        <p>I hold a <strong>Bachelor of Arts from UBC</strong> and completed Computer Science coursework at the University of Saskatchewan. I also hold a <strong>Microsoft AI &amp; Machine Learning certificate</strong>.</p>
+        <div class="football-banner">
+          <div class="football-banner-header">
+            <div class="football-banner-title">Athletic Accolades</div>
+            <div class="football-banner-sub">Competed at the Division I level across three universities in two countries. Football taught me how to perform under pressure, adjust quickly, and stay accountable to a team standard.</div>
+          </div>
+          <div class="football-school-cards">
+            <div class="football-school-card">
+              <div class="football-school-name">University of Maine</div>
+              <div class="football-school-detail">Division I, FCS</div>
+              <div class="football-school-accolades"><span class="football-accolade">Scholar Athlete</span></div>
+            </div>
+            <div class="football-school-card">
+              <div class="football-school-name">Univ. of British Columbia</div>
+              <div class="football-school-detail">Canada West</div>
+              <div class="football-school-accolades"><span class="football-accolade">Academic All-Canadian</span></div>
+            </div>
+            <div class="football-school-card">
+              <div class="football-school-name">Univ. of Saskatchewan</div>
+              <div class="football-school-detail">Canada West</div>
+              <div class="football-school-accolades">
+                <span class="football-accolade">Canada West All-Star</span>
+                <span class="football-accolade">Hardy Cup Champion</span>
+                <span class="football-accolade">National Finalist</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="about-sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-card-title">Education</div>
+        <div class="sidebar-item"><div class="sidebar-dot"></div><div><strong>Bachelor of Arts</strong><br/>University of British Columbia</div></div>
+        <div class="sidebar-item"><div class="sidebar-dot"></div><div><strong>Computer Science</strong><br/>University of Saskatchewan</div></div>
+        <div class="sidebar-item"><div class="sidebar-dot"></div><div><strong>Microsoft AI &amp; ML Certificate</strong></div></div>
+      </div>
+      <div class="sidebar-card">
+        <div class="sidebar-card-title">Core Expertise</div>
+        <div class="sidebar-item"><div class="sidebar-dot"></div>Applied AI Systems (Claude API)</div>
+        <div class="sidebar-item"><div class="sidebar-dot"></div>Python · FastAPI · Pandas</div>
+        <div class="sidebar-item"><div class="sidebar-dot"></div>Supply Chain Analytics</div>
+        <div class="sidebar-item"><div class="sidebar-dot"></div>Data Pipeline Automation</div>
+        <div class="sidebar-item"><div class="sidebar-dot"></div>Microsoft 365 Ecosystem</div>
+        <div class="sidebar-item"><div class="sidebar-dot"></div>Full-Stack Web Applications</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-eyebrow">Kai Technologies Portfolio</div>
+  <h2 class="section-title">Tools built for <em>real business problems.</em></h2>
+  <div class="divider"></div>
+  <div class="projects-grid">
+    <div class="project-card card-green">
+      <div class="project-card-header"><div class="project-icon">📊</div><div class="project-tag">Operations</div></div>
+      <div class="project-name">OpsAnalyst</div>
+      <div class="project-tagline">Spreadsheet analysis for operations teams</div>
+      <div class="project-desc">Upload any CSV or Excel file and get a structured analysis of anomalies, data quality issues, vendor spend, and lead time trends. Built to reduce manual spreadsheet review and speed up decision-making.</div>
+      <div class="project-tech"><span class="tech-chip">FastAPI</span><span class="tech-chip">Claude API</span><span class="tech-chip">Pandas</span><span class="tech-chip">Chart.js</span><span class="tech-chip">SSE Streaming</span></div>
+    </div>
+    <div class="project-card card-violet">
+      <div class="project-card-header"><div class="project-icon">📄</div><div class="project-tag">Documents</div></div>
+      <div class="project-name">DocuExtract AI</div>
+      <div class="project-tagline">Document extraction with confidence scoring</div>
+      <div class="project-desc">Upload invoices or booking confirmations and extract structured fields with confidence scores, flagged exceptions, and editable outputs. Designed for documents that are inconsistent, bilingual, or difficult to process with standard OCR tools.</div>
+      <div class="project-tech"><span class="tech-chip">FastAPI</span><span class="tech-chip">PyMuPDF</span><span class="tech-chip">Claude API</span><span class="tech-chip">Rule Engine</span><span class="tech-chip">Bilingual</span></div>
+    </div>
+    <div class="project-card card-amber">
+      <div class="project-card-header"><div class="project-icon">📋</div><div class="project-tag">Procurement</div></div>
+      <div class="project-name">ProcureIQ</div>
+      <div class="project-tagline">RFQ comparison and vendor evaluation</div>
+      <div class="project-desc">Upload 2 to 5 supplier quotes in CSV, Excel, or PDF format. The tool standardizes each submission, compares vendors across key criteria, flags issues, and produces a recommendation with supporting rationale.</div>
+      <div class="project-tech"><span class="tech-chip">FastAPI</span><span class="tech-chip">Claude API</span><span class="tech-chip">Multi-format</span><span class="tech-chip">Scoring Engine</span><span class="tech-chip">Excel Export</span></div>
+    </div>
+    <div class="project-card card-teal">
+      <div class="project-card-header"><div class="project-icon">🗂</div><div class="project-tag">HR / Onboarding</div></div>
+      <div class="project-name">OnboardIQ</div>
+      <div class="project-tagline">Employee onboarding document processor</div>
+      <div class="project-desc">Upload onboarding PDFs for multiple employees at once. The tool classifies each document, extracts key fields, groups records by employee, checks completeness, and exports a clean HR-ready output.</div>
+      <div class="project-tech"><span class="tech-chip">FastAPI</span><span class="tech-chip">Claude API</span><span class="tech-chip">Batch Processing</span><span class="tech-chip">Fuzzy Matching</span><span class="tech-chip">HRIS Export</span></div>
+    </div>
+    <div class="project-card card-red" style="grid-column: 1 / -1; max-width: 540px; margin: 0 auto; width: 100%;">
+      <div class="project-card-header"><div class="project-icon">📜</div><div class="project-tag">Legal / Contracts</div></div>
+      <div class="project-name">ContractIQ</div>
+      <div class="project-tagline">Contract review with clause-level risk analysis</div>
+      <div class="project-desc">Upload a vendor, SaaS, or consulting contract and receive a structured risk review. The tool highlights key clauses, identifies missing protections, scores the overall agreement, and produces a prioritized list of negotiation points.</div>
+      <div class="project-tech"><span class="tech-chip">FastAPI</span><span class="tech-chip">Claude API</span><span class="tech-chip">Risk Scoring</span><span class="tech-chip">Clause Analysis</span><span class="tech-chip">Excel Export</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section id="case-studies">
+  <div class="section-eyebrow">Real Work · Proven Results</div>
+  <h2 class="section-title">Automation built <em>in production.</em></h2>
+  <div class="divider"></div>
+  <p class="case-studies-intro">These are production automation systems built and deployed inside a real supply chain operation. The problems were messy, the stakes were real, and the results were measurable. This is the work that informs every tool I build at Kai Technologies.</p>
+
+  <div class="case-study case-study-1">
+    <div class="cs-header">
+      <div class="cs-meta">
+        <div class="cs-eyebrow">Case Study 01 · Supply Chain Operations</div>
+        <div class="cs-title">End-to-End Data Pipeline Automation</div>
+        <div class="cs-subtitle">Replacing a multi-day manual workflow with a fully automated system</div>
+      </div>
+      <div class="cs-impact-pills"><span class="cs-pill">Days → Minutes</span><span class="cs-pill">15h+/week saved</span><span class="cs-pill">Zero manual uploads</span></div>
+    </div>
+    <div class="cs-body">
+      <div><div class="cs-col-title">The Problem</div><div class="cs-col-body"><p>Analysts were manually generating files from multiple data sources, running repetitive validation checks in Excel, uploading files into internal systems by hand, and troubleshooting errors with no visibility into what failed or why. The process took multiple days per cycle, was error-prone, and impossible to scale.</p></div></div>
+      <div><div class="cs-col-title">The Solution</div><div class="cs-col-body"><ul><li>Automated file generation from source data using Python</li><li>Multi-level validation with duplicate detection and business rule checks</li><li>Browser automation for system uploads, including SSO-authenticated workflows</li><li>Excel automation for pivot summaries, issue tracking, and structured output</li><li>End-to-end pipeline execution requiring minimal human intervention</li></ul></div></div>
+      <div><div class="cs-col-title">The Impact</div><div class="cs-col-body"><ul><li>Processing time reduced from multiple days to minutes</li><li>15+ hours of manual work eliminated per week</li><li>Data accuracy and consistency improved significantly</li><li>Operations became fully repeatable and scalable</li><li>Errors surfaced automatically, with clear visibility into root cause</li></ul></div></div>
+    </div>
+    <div class="cs-tech"><span class="tech-chip">Python</span><span class="tech-chip">Selenium</span><span class="tech-chip">xlwings</span><span class="tech-chip">Pandas</span><span class="tech-chip">Excel Automation</span><span class="tech-chip">SSO Web Automation</span><span class="tech-chip">Data Validation</span></div>
+  </div>
+
+  <div class="case-study case-study-2">
+    <div class="cs-header">
+      <div class="cs-meta">
+        <div class="cs-eyebrow">Case Study 02 · Data Quality & Reporting</div>
+        <div class="cs-title">Automated Data Quality Monitoring & Executive Reporting</div>
+        <div class="cs-subtitle">Weekly trend visibility for leadership — without the manual effort</div>
+      </div>
+      <div class="cs-impact-pills"><span class="cs-pill">Manual reporting eliminated</span><span class="cs-pill">Leadership visibility</span><span class="cs-pill">Trend tracking enabled</span></div>
+    </div>
+    <div class="cs-body">
+      <div><div class="cs-col-title">The Problem</div><div class="cs-col-body"><p>Data quality issues across supply chain datasets were tracked manually with no centralized view. There was no way to identify recurring problems over time, no consistent classification, and reporting required repetitive Excel manipulation every week. Leadership lacked any clear picture of issue trends or root causes.</p></div></div>
+      <div><div class="cs-col-title">The Solution</div><div class="cs-col-body"><ul><li>Automated weekly data aggregation across quality outputs</li><li>Standardized issue classification logic (Issue vs. No Issue)</li><li>Centralized tracker updated automatically each cycle</li><li>Pivot-based reporting showing trends, root causes, and historical patterns</li><li>Consistent output format ready for leadership review without manual prep</li></ul></div></div>
+      <div><div class="cs-col-title">The Impact</div><div class="cs-col-body"><ul><li>Weekly manual reporting effort fully eliminated</li><li>Recurring issues identified and tracked over time</li><li>Leadership gained clear, consistent visibility into data health</li><li>Reporting standardized across the team with no additional effort</li><li>Enabled data-driven decisions based on trends, not one-off snapshots</li></ul></div></div>
+    </div>
+    <div class="cs-tech"><span class="tech-chip">Python</span><span class="tech-chip">Pandas</span><span class="tech-chip">Excel Automation</span><span class="tech-chip">Pivot Reporting</span><span class="tech-chip">Issue Classification</span><span class="tech-chip">Historical Tracking</span></div>
+  </div>
+
+  <div class="case-study case-study-3">
+    <div class="cs-header">
+      <div class="cs-meta">
+        <div class="cs-eyebrow">Case Study 03 · Automation Framework</div>
+        <div class="cs-title">Reusable Python + Excel Automation Framework</div>
+        <div class="cs-subtitle">Building once to solve many — a modular foundation for repeatable workflows</div>
+      </div>
+      <div class="cs-impact-pills"><span class="cs-pill">Reusable across workflows</span><span class="cs-pill">Reduced Excel dependency</span><span class="cs-pill">Faster future builds</span></div>
+    </div>
+    <div class="cs-body">
+      <div><div class="cs-col-title">The Problem</div><div class="cs-col-body"><p>Teams relied heavily on manual Excel work for data transformation, validation, and reporting. Each workflow was built from scratch, creating inconsistency and making future automation slow to deliver. There were no shared building blocks — every new request started at zero.</p></div></div>
+      <div><div class="cs-col-title">The Solution</div><div class="cs-col-body"><ul><li>Designed a modular hybrid system combining Python (pandas) with Excel (xlwings)</li><li>Reusable functions for column transformations, concatenation, and validation</li><li>Multi-stage validation processes applicable across different datasets</li><li>Dynamic pivot table creation built into the framework</li><li>Documented and structured for team adoption and future extension</li></ul></div></div>
+      <div><div class="cs-col-title">The Impact</div><div class="cs-col-body"><ul><li>Manual Excel dependency significantly reduced across the team</li><li>New automation workflows delivered faster using shared components</li><li>Consistent output quality regardless of who ran the process</li><li>Framework extended to support multiple use cases without rebuilding from scratch</li></ul></div></div>
+    </div>
+    <div class="cs-tech"><span class="tech-chip">Python</span><span class="tech-chip">Pandas</span><span class="tech-chip">xlwings</span><span class="tech-chip">Excel Automation</span><span class="tech-chip">Modular Design</span><span class="tech-chip">Data Transformation</span></div>
+  </div>
+</section>
+
+<!-- RESUME -->
+<section id="resume">
+  <div class="resume-header">
+    <div>
+      <div class="section-eyebrow">Experience & Credentials</div>
+      <h2 class="section-title" style="margin-bottom:0">Ted <em>Kubongo</em></h2>
+    </div>
+    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+      <button type="button" class="btn-outline" onclick="toggleResumePdf()" id="resume-pdf-toggle">View PDF</button>
+      <a href="./Ted%20Kubongo.pdf" download class="btn-primary">⬇ Download PDF</a>
+    </div>
+  </div>
+
+  <div style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim); margin-bottom: 1.5rem;">
+    Calgary, AB · Canada &nbsp;·&nbsp; tedkubongo07@gmail.com &nbsp;·&nbsp; Bilingual (EN / FR)
+  </div>
+
+  <div id="resume-pdf-viewer" style="display:none; width:100%; border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:2.5rem; background:#111;">
+    <iframe src="./Ted%20Kubongo.pdf" width="100%" loading="lazy" style="display:block; width:100%; height:min(85vh, 1100px); border:none; background:#fff;" title="Ted Kubongo Resume">
+      <p style="padding:2rem; color:var(--text-dim); font-family:var(--font-mono); font-size:0.8rem;">PDF viewer not supported. <a href="./Ted%20Kubongo.pdf" style="color:var(--accent);">Download it here.</a></p>
+    </iframe>
+  </div>
+
+  <div class="resume-section">
+    <div class="resume-section-title">Summary</div>
+    <div class="resume-item-body" style="font-size:0.9rem; line-height:1.75; color:var(--text-mid);">Supply chain and automation professional with a track record of building and deploying production systems that reduce manual work, improve data accuracy, and deliver measurable operational impact. Experience spans end-to-end pipeline automation, data quality monitoring, applied AI tooling, and full-stack business application development.</div>
+  </div>
+
+  <div class="resume-section">
+    <div class="resume-section-title">Professional Experience</div>
+    <div class="resume-item">
+      <div class="resume-item-header"><div class="resume-item-title">Founder, Automation Consultant</div></div>
+      <div class="resume-item-sub">Kai Technologies · Calgary, AB</div>
+      <ul class="resume-item-body">
+        <li>Design and build automation and applied AI tools for operations, procurement, HR, document processing, and contract review workflows</li>
+        <li>Built five full-stack business applications using FastAPI, Python, and the Claude API</li>
+        <li>Lead go-to-market efforts through direct outreach and business development across North America</li>
+      </ul>
+    </div>
+    <div class="resume-item">
+      <div class="resume-item-header"><div class="resume-item-title">Supply Chain Data Analyst</div></div>
+      <div class="resume-item-sub">Loblaw Companies Ltd. · Brampton, ON</div>
+      <ul class="resume-item-body">
+        <li>Built an end-to-end data pipeline that replaced a multi-day manual process — reduced to minutes with automated validation, browser-based uploads, and structured reporting output</li>
+        <li>Developed an automated data quality monitoring and executive reporting system, eliminating weekly manual effort and creating historical trend visibility for leadership</li>
+        <li>Built a reusable Python + Excel automation framework that reduced manual Excel dependency and accelerated delivery of future automation workflows</li>
+        <li>Investigated and resolved system issues affecting replenishment, inventory discrepancies, and approval logic across SAP and other internal platforms</li>
+        <li>Documented tools and trained teammates to improve adoption and consistency across the team</li>
+      </ul>
+    </div>
+    <div class="resume-item">
+      <div class="resume-item-header"><div class="resume-item-title">Specialist</div></div>
+      <div class="resume-item-sub">Apple · Calgary, AB</div>
+      <ul class="resume-item-body">
+        <li>Translated complex technical concepts into clear, data-informed recommendations for diverse business and individual customers</li>
+        <li>Supported team operations through backstage product prep, inventory checks, and Vision Pro demo assembly</li>
+      </ul>
+    </div>
+    <div class="resume-item">
+      <div class="resume-item-header"><div class="resume-item-title">Technical Expert</div></div>
+      <div class="resume-item-sub">TELUS · Calgary, AB</div>
+      <ul class="resume-item-body"><li>Delivered consultative technical support and sales, contributing to revenue growth and strong client satisfaction</li></ul>
+    </div>
+  </div>
+
+  <div class="resume-section">
+    <div class="resume-section-title">Technical Skills</div>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="skill-group-title">AI &amp; Automation</div>
+        <div class="skill-list">
+          <div class="skill-item">Anthropic Claude API</div>
+          <div class="skill-item">Agentic AI systems</div>
+          <div class="skill-item">Prompt engineering</div>
+          <div class="skill-item">Workflow automation</div>
+          <div class="skill-item">FastAPI · Python</div>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Data &amp; Analytics</div>
+        <div class="skill-list">
+          <div class="skill-item">Python · SQL · VBA</div>
+          <div class="skill-item">Excel (Advanced)</div>
+          <div class="skill-item">Data cleaning &amp; validation</div>
+          <div class="skill-item">KPI dashboarding</div>
+          <div class="skill-item">Pandas · openpyxl · xlwings</div>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Business &amp; Tools</div>
+        <div class="skill-list">
+          <div class="skill-item">SAP</div>
+          <div class="skill-item">ServiceNow</div>
+          <div class="skill-item">Google Workspace</div>
+          <div class="skill-item">SaaS integrations</div>
+          <div class="skill-item">Bilingual, EN / FR</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="resume-section">
+    <div class="resume-section-title">Education</div>
+    <div class="resume-item">
+      <div class="resume-item-header"><div class="resume-item-title">Bachelor of Arts</div></div>
+      <div class="resume-item-sub">University of British Columbia · Vancouver, BC</div>
+    </div>
+    <div class="resume-item">
+      <div class="resume-item-header"><div class="resume-item-title">Computer Science (Coursework)</div></div>
+      <div class="resume-item-sub">University of Saskatchewan · Saskatoon, SK</div>
+    </div>
+    <div class="resume-item">
+      <div class="resume-item-header"><div class="resume-item-title">AI &amp; Machine Learning Certificate</div></div>
+      <div class="resume-item-sub">Microsoft</div>
+    </div>
+  </div>
+
+  <div class="resume-section">
+    <div class="resume-section-title">Athletics</div>
+    <div class="resume-item">
+      <div class="resume-item-header"><div class="resume-item-title">College Football, Running Back</div>
+      <div class="resume-item-sub">University of Maine (D1 FCS) · University of British Columbia · University of Saskatchewan</div>
+      <div class="resume-item-body" style="margin-top:0.35rem">Canada West All-Star · Hardy Cup Champion · National Finalist · Academic All-Canadian · Scholar Athlete.</div>
+    </div>
+  </div>
+
+  <div class="resume-section">
+    <div class="resume-section-title">Skills</div>
+    <div class="resume-chips">
+      <span class="resume-chip">Python</span><span class="resume-chip">SQL</span><span class="resume-chip">VBA</span>
+      <span class="resume-chip">Excel (Advanced)</span><span class="resume-chip">FastAPI</span>
+      <span class="resume-chip">Anthropic Claude API</span><span class="resume-chip">Applied AI</span>
+      <span class="resume-chip">Workflow Automation</span><span class="resume-chip">Data Cleaning</span>
+      <span class="resume-chip">Dashboarding</span><span class="resume-chip">Selenium</span>
+      <span class="resume-chip">xlwings</span><span class="resume-chip">SAP</span>
+      <span class="resume-chip">ServiceNow</span><span class="resume-chip">Google Workspace</span>
+      <span class="resume-chip">SaaS Integrations</span><span class="resume-chip">Bilingual EN/FR</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-eyebrow">Get In Touch</div>
+  <h2 class="section-title">Let's talk about <em>your problem.</em></h2>
+  <div class="divider"></div>
+  <div class="contact-grid">
+    <div>
+      <p class="contact-intro">I work with operations, procurement, HR, and finance teams that are still relying on manual processes to get things done. If you're dealing with <strong>slow reporting, repetitive data work, document bottlenecks, or workflows that don't scale</strong> — that's exactly where I can help.</p>
+      <p class="contact-intro">Reach out directly. Just a straightforward conversation about what you're working on.</p>
+      <div class="contact-links">
+        <a href="mailto:tedkubongo07@gmail.com" class="contact-link">
+          <div class="contact-link-icon">✉</div>
+          <div class="contact-link-body"><span class="contact-link-label">Email</span><span class="contact-link-value">tedkubongo07@gmail.com</span></div>
+        </a>
+        <a href="https://www.linkedin.com/in/ted-kubongo" target="_blank" rel="noopener" class="contact-link">
+          <div class="contact-link-icon">in</div>
+          <div class="contact-link-body"><span class="contact-link-label">LinkedIn</span><span class="contact-link-value">linkedin.com/in/ted-kubongo</span></div>
+        </a>
+        <a href="tel:5874396713" class="contact-link">
+          <div class="contact-link-icon">📞</div>
+          <div class="contact-link-body"><span class="contact-link-label">Phone</span><span class="contact-link-value">587-439-6713</span></div>
+        </a>
+      </div>
+    </div>
+    <div class="contact-sidebar">
+      <div class="contact-availability">
+        <div class="contact-avail-header"><div class="contact-avail-dot"></div><div class="contact-avail-title">Available for new projects</div></div>
+        <p class="contact-avail-body">Open to consulting engagements, contract work, and full-time opportunities across North America. I respond to all inquiries within one business day.</p>
+      </div>
+      <div class="contact-what">
+        <div class="contact-what-title">What I can help with</div>
+        <div class="contact-what-list">
+          <div class="contact-what-item">Automating repetitive data and reporting workflows</div>
+          <div class="contact-what-item">Building document extraction and processing pipelines</div>
+          <div class="contact-what-item">Procurement and vendor comparison tooling</div>
+          <div class="contact-what-item">Contract review and risk analysis systems</div>
+          <div class="contact-what-item">HR onboarding document automation</div>
+          <div class="contact-what-item">Custom AI-powered business tools</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function showSection(id) {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const navEl = document.getElementById('nav-' + id);
+    if (navEl) navEl.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return false;
+  }
+  function toggleDrawer() {
+    const drawer = document.getElementById('nav-drawer');
+    const burger = document.getElementById('nav-hamburger');
+    const isOpen = drawer.classList.contains('open');
+    drawer.classList.toggle('open', !isOpen);
+    burger.classList.toggle('open', !isOpen);
+    document.body.style.overflow = isOpen ? '' : 'hidden';
+  }
+  function showSectionMobile(id) {
+    showSection(id);
+    document.querySelectorAll('.nav-drawer a').forEach(a => a.classList.remove('active'));
+    const drawer = document.getElementById('nav-drawer');
+    const burger = document.getElementById('nav-hamburger');
+    drawer.classList.remove('open');
+    burger.classList.remove('open');
+    document.body.style.overflow = '';
+    return false;
+  }
+  function toggleResumePdf() {
+    const viewer = document.getElementById('resume-pdf-viewer');
+    const toggle = document.getElementById('resume-pdf-toggle');
+    const isOpen = viewer.style.display !== 'none';
+    viewer.style.display = isOpen ? 'none' : 'block';
+    toggle.textContent = isOpen ? 'View PDF' : 'Hide PDF';
+    if (!isOpen) viewer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  const FLOAT_WORDS = ['Python','FastAPI','Claude API','Agentic AI','Supply Chain','Data Analytics','Automation','Kai Technologies','Power BI','Pandas','Document AI','Risk Analysis','Procurement','Onboarding','xlwings','PostgreSQL','Machine Learning','NLP','REST API','Consulting'];
+  function spawnFloatWord() {
+    const container = document.getElementById('hero-floats');
+    if (!container) return;
+    const el = document.createElement('div');
+    el.className = 'float-word';
+    el.textContent = FLOAT_WORDS[Math.floor(Math.random() * FLOAT_WORDS.length)];
+    el.style.left = (Math.random() * 90) + '%';
+    el.style.bottom = (Math.random() * 40) + '%';
+    const dur = 8 + Math.random() * 8;
+    const delay = Math.random() * 2;
+    el.style.animationDuration = dur + 's';
+    el.style.animationDelay = delay + 's';
+    container.appendChild(el);
+    setTimeout(() => el.remove(), (dur + delay + 1) * 1000);
+  }
+  setInterval(() => { if (document.getElementById('home').classList.contains('active')) spawnFloatWord(); }, 1500);
+  setTimeout(() => { for (let i = 0; i < 5; i++) setTimeout(spawnFloatWord, i * 400); }, 800);
+</script>
+</body>
+</html>
