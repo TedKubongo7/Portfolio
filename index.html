@@ -263,6 +263,8 @@
     .project-desc { font-size: 0.88rem; color: var(--text-mid); line-height: 1.7; font-weight: 300; margin-bottom: 1.25rem; }
     .project-tech { display: flex; gap: 0.4rem; flex-wrap: wrap; }
     .tech-chip { font-family: var(--font-mono); font-size: 0.62rem; color: var(--text-dim); background: var(--bg-3); border: 1px solid var(--border); padding: 0.2rem 0.55rem; border-radius: 5px; }
+    .demo-btn { margin-top: 1.25rem; display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.05em; color: var(--card-accent, var(--accent)); background: transparent; border: 1px solid var(--card-accent, var(--accent)); padding: 0.45rem 1rem; border-radius: 6px; cursor: pointer; transition: background 0.2s, color 0.2s; }
+    .demo-btn:hover { background: var(--card-accent, var(--accent)); color: #000; }
     .card-green  { --card-accent: #00e5a0; } .card-violet { --card-accent: #a78bfa; }
     .card-amber  { --card-accent: #f59e0b; } .card-teal   { --card-accent: #2dd4bf; }
     .card-red    { --card-accent: #f87171; }
@@ -572,40 +574,45 @@
   <h2 class="section-title">Tools built for <em>real business problems.</em></h2>
   <div class="divider"></div>
   <div class="projects-grid">
-    <div class="project-card card-green">
+    <div class="project-card card-green" onclick="window.open('https://ops-analyst-production.up.railway.app', '_blank')">
       <div class="project-card-header"><div class="project-icon">📊</div><div class="project-tag">Operations</div></div>
       <div class="project-name">OpsAnalyst</div>
       <div class="project-tagline">Spreadsheet analysis for operations teams</div>
       <div class="project-desc">Upload any CSV or Excel file and get a structured analysis of anomalies, data quality issues, vendor spend, and lead time trends. Built to reduce manual spreadsheet review and speed up decision-making.</div>
       <div class="project-tech"><span class="tech-chip">FastAPI</span><span class="tech-chip">Claude API</span><span class="tech-chip">Pandas</span><span class="tech-chip">Chart.js</span><span class="tech-chip">SSE Streaming</span></div>
+      <button type="button" class="demo-btn" onclick="event.stopPropagation(); window.open('https://ops-analyst-production.up.railway.app', '_blank')">Try Demo →</button>
     </div>
-    <div class="project-card card-violet">
+    <div class="project-card card-violet" onclick="window.open('https://docuextract-production-c14a.up.railway.app', '_blank')">
       <div class="project-card-header"><div class="project-icon">📄</div><div class="project-tag">Documents</div></div>
       <div class="project-name">DocuExtract AI</div>
       <div class="project-tagline">Document extraction with confidence scoring</div>
       <div class="project-desc">Upload invoices or booking confirmations and extract structured fields with confidence scores, flagged exceptions, and editable outputs. Designed for documents that are inconsistent, bilingual, or difficult to process with standard OCR tools.</div>
       <div class="project-tech"><span class="tech-chip">FastAPI</span><span class="tech-chip">PyMuPDF</span><span class="tech-chip">Claude API</span><span class="tech-chip">Rule Engine</span><span class="tech-chip">Bilingual</span></div>
+      <button type="button" class="demo-btn" onclick="event.stopPropagation(); window.open('https://docuextract-production-c14a.up.railway.app', '_blank')">Try Demo →</button>
     </div>
-    <div class="project-card card-amber">
+    <div class="project-card card-amber" onclick="window.open('https://procureiq-production-2e24.up.railway.app', '_blank')">
       <div class="project-card-header"><div class="project-icon">📋</div><div class="project-tag">Procurement</div></div>
       <div class="project-name">ProcureIQ</div>
       <div class="project-tagline">RFQ comparison and vendor evaluation</div>
       <div class="project-desc">Upload 2 to 5 supplier quotes in CSV, Excel, or PDF format. The tool standardizes each submission, compares vendors across key criteria, flags issues, and produces a recommendation with supporting rationale.</div>
       <div class="project-tech"><span class="tech-chip">FastAPI</span><span class="tech-chip">Claude API</span><span class="tech-chip">Multi-format</span><span class="tech-chip">Scoring Engine</span><span class="tech-chip">Excel Export</span></div>
+      <button type="button" class="demo-btn" onclick="event.stopPropagation(); window.open('https://procureiq-production-2e24.up.railway.app', '_blank')">Try Demo →</button>
     </div>
-    <div class="project-card card-teal">
+    <div class="project-card card-teal" onclick="window.open('https://onboardiq-production-041b.up.railway.app', '_blank')">
       <div class="project-card-header"><div class="project-icon">🗂</div><div class="project-tag">HR / Onboarding</div></div>
       <div class="project-name">OnboardIQ</div>
       <div class="project-tagline">Employee onboarding document processor</div>
       <div class="project-desc">Upload onboarding PDFs for multiple employees at once. The tool classifies each document, extracts key fields, groups records by employee, checks completeness, and exports a clean HR-ready output.</div>
       <div class="project-tech"><span class="tech-chip">FastAPI</span><span class="tech-chip">Claude API</span><span class="tech-chip">Batch Processing</span><span class="tech-chip">Fuzzy Matching</span><span class="tech-chip">HRIS Export</span></div>
+      <button type="button" class="demo-btn" onclick="event.stopPropagation(); window.open('https://onboardiq-production-041b.up.railway.app', '_blank')">Try Demo →</button>
     </div>
-    <div class="project-card card-red" style="grid-column: 1 / -1; max-width: 540px; margin: 0 auto; width: 100%;">
+    <div class="project-card card-red" style="grid-column: 1 / -1; max-width: 540px; margin: 0 auto; width: 100%;" onclick="window.open('https://contractiq-production-c9ab.up.railway.app', '_blank')">
       <div class="project-card-header"><div class="project-icon">📜</div><div class="project-tag">Legal / Contracts</div></div>
       <div class="project-name">ContractIQ</div>
       <div class="project-tagline">Contract review with clause-level risk analysis</div>
       <div class="project-desc">Upload a vendor, SaaS, or consulting contract and receive a structured risk review. The tool highlights key clauses, identifies missing protections, scores the overall agreement, and produces a prioritized list of negotiation points.</div>
       <div class="project-tech"><span class="tech-chip">FastAPI</span><span class="tech-chip">Claude API</span><span class="tech-chip">Risk Scoring</span><span class="tech-chip">Clause Analysis</span><span class="tech-chip">Excel Export</span></div>
+      <button type="button" class="demo-btn" onclick="event.stopPropagation(); window.open('https://contractiq-production-c9ab.up.railway.app', '_blank')">Try Demo →</button>
     </div>
   </div>
 </section>
